@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Categories</title>
+<title>Catalogo</title>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Wish shop project">
@@ -743,7 +743,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </div>
 
 
-<script>
+<!-- <script>
 	var carrito=[];
 if(localStorage.getItem("Carrito")==null){
 	localStorage.setItem("Carrito", JSON.stringify(carrito));
@@ -753,66 +753,53 @@ if(localStorage.getItem("Carrito")==null){
 //carrito= Array.from(JSON.parse(localStorage.getItem("Carrito"))); 
 var contador_carrito=document.getElementById("cantidad_productosCarrito");
 contador_carrito.textContent=`${carrito.length}`;
-</script>
+</script> -->
 
 
 <script>
-	var productos = []; 
-	
-	function storesessionStorage(productos){
+
+	/* function storesessionStorage(productos){
 		sessionStorage.setItem("Productos", JSON.stringify(productos));
+	} */
+
+	function insertarProductosFront(productosArray){
+		for(var i=0;i<productosArray.length;i++){
+			let index=i+1;
+
+			let ruta=document.getElementById(`Img_Ruta_${index}`);
+			let nombre_producto=document.getElementById(`Nombre_${index}`);
+			let precio=document.getElementById(`Precio_${index}`);
+			
+			ruta.src=`${productosArray[i].Imagen_Producto}`;
+
+			nombre_producto.textContent=productosArray[i].Nombre_Producto;
+			nombre_producto.href=`\product.html?yourKey=${productosArray[i].idProducto}`;
+			//nombre_producto.setAttribute('onclick',`window.open('\product.html?yourKey='+${productos[i].idProducto});`);
+			ruta.setAttribute('onclick',`window.open('\product.html?yourKey='${productosArray[i].idProducto});`);
+			//ruta.setAttribute('onclick',`window.close()`);
+			precio.textContent=`$${productosArray[i].Precio_Producto}.00`;
+
+		}
 	}
 
+
 	// Funciones para acceder a la base de datos
-	function getAPIProducto() {
-		
-
-
-            //datos.innerHTML = "";
-            axios.get('http://localhost:3000/Productos')
-            .then(response => {
-				
-				console.log(response); 
-                productos = response.data; // Arreglo con los productos
-				console.log(productos);
-
-				/*Envio productos a otra pagina*/
-				var prod = productos[0].Nombre_Producto; 
-				storesessionStorage(productos);
-				// De paso ya se cargaria en la pagina. 
-				
-				for(var i=0;i<productos.length;i++){
-					let index=i+1;
-
-					let ruta=document.getElementById(`Img_Ruta_${index}`);
-					let nombre_producto=document.getElementById(`Nombre_${index}`);
-					let precio=document.getElementById(`Precio_${index}`);
-
-					ruta.src=`${productos[i].Imagen_Producto}`;
-
-					nombre_producto.textContent=productos[i].Nombre_Producto;
-					nombre_producto.href=`\product.html?yourKey=${productos[i].idProducto}`;
-					//nombre_producto.setAttribute('onclick',`window.open('\product.html?yourKey='+${productos[i].idProducto});`);
-					ruta.setAttribute('onclick',`window.open('\product.html?yourKey='${productos[i].idProducto});`);
-					//ruta.setAttribute('onclick',`window.close()`);
-					precio.textContent=`$${productos[i].Precio_Producto}.00`;
-
-				}
-			
-			})
-            .catch(error => console.log(error))
-    }
-	
+	async function getAPIProducto(){
+		try {
+			let productos = []; 
+			let response = await axios.get('http://localhost:3000/Productos');
+			console.log(response.data); // Esto es un array 
+			productos = response.data; 
+			productos.forEach(elem =>{console.log(elem)});
+			insertarProductosFront(productos);
+		} catch (error) {
+			console.log(error); 
+		}
+	}
 	
 
 	window.onload = function() {
         getAPIProducto();
-		console.log(productos); 
-		//storesessionStorage(productos); // Almaceno en local store
-
-		
-		
-		// En esta instancia la variable productos ya deberia de tener elementos 
     }
 
 

@@ -129,7 +129,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<!-- Product -->
 
 	<div class="product">
@@ -366,15 +366,15 @@
 						</ul>
 					</div>
 					<div class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+					Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
 				</div>
 			</div>
 		</div>
 	</footer>
 </div>
 
-<script>
+<!-- <script>
 	var carrito=[];
 if(localStorage.getItem("Carrito")==null){
 	localStorage.setItem("Carrito", JSON.stringify(carrito));
@@ -384,18 +384,11 @@ if(localStorage.getItem("Carrito")==null){
 //carrito= Array.from(JSON.parse(localStorage.getItem("Carrito"))); 
 var contador_carrito=document.getElementById("cantidad_productosCarrito");
 contador_carrito.textContent=`${carrito.length}`;
-</script>
+</script> -->
 
 <script>
 	// Recibo lo que me envian.  
-	/*
-	function corroborar(){
-		var elemento = Array.from(JSON.parse(sessionStorage.getItem("Productos"))); 
-		console.log("El elemento es:")
-		console.log(elemento);
-	}
-	*/
-
+	
 	function recupero_id(){
 		var query = location.search.substring(1);
 		var keyValues = query.split(/=/);
@@ -403,66 +396,63 @@ contador_carrito.textContent=`${carrito.length}`;
 		return keyValues[1]; 
 	}
 
-	function getIdProducto(id) {
-		var carrito=[];
+	function funcion_boton_agregarCarrito(){
+		console.log("prueba de boton 1");
+		let cart= Array.from(JSON.parse(localStorage.getItem("Carrito")));
+		cart.push((document.getElementById("contenido_producto")).value);
+		localStorage.setItem("Carrito", JSON.stringify(cart));
+		console.log("prueba de boton 1");
+	}
+
+	function insertarProductoFront(arrayProducto){
+
+		let ruta=document.getElementById("imagen_del_producto");
+		let nombre_producto=document.getElementById("nombre_del_producto");
+		let precio=document.getElementById("precio_del_producto");
+		let descripcion=document.getElementById("descripcion_del_producto");
+		///sessionStorage.removeItem("UnProducto");
+		let prod_cont=document.getElementById("contenido_producto");
+		prod_cont.setAttribute("value",`${arrayProducto[0].idProducto}`);
+		ruta.src=`${arrayProducto[0].Imagen_Producto}`;
+
+		nombre_producto.textContent=`${arrayProducto[0].Nombre_Producto}`;
 		
-		let id_prod=id;
-		//datos.innerHTML = "";
-		//console.log(id);
-		axios.get(`http://localhost:3000/Productos/${id_prod}`)
-		.then(response => {
-			var producto = []; 
-			producto = response.data; 
-			let ruta=document.getElementById("imagen_del_producto");
-			let nombre_producto=document.getElementById("nombre_del_producto");
-			let precio=document.getElementById("precio_del_producto");
-			let descripcion=document.getElementById("descripcion_del_producto");
-			///sessionStorage.removeItem("UnProducto");
-			let prod_cont=document.getElementById("contenido_producto");
-			prod_cont.setAttribute("value",id);
-			ruta.src=`${producto[0].Imagen_Producto}`;
+		precio.textContent=`$${arrayProducto[0].Precio_Producto}.00`;
 
-			nombre_producto.textContent=`${producto[0].Nombre_Producto}`;
-			
-			precio.textContent=`$${producto[0].Precio_Producto}.00`;
+		descripcion.textContent=`${arrayProducto[0].Descripcion_Producto}`;
 
-			descripcion.textContent=`${producto[0].Descripcion_Producto}`;
-
-			for(var i=0;i<3;i++){
-				let min_foto=document.getElementById(`mini_foto_${(i+1)}`);
-				min_foto.style=`background-image:url(${producto[0].Imagen_Producto}})`;
-				min_foto.setAttribute("data-image",`${producto[0].Imagen_Producto}`);
-			}
-			
-			let boton_agregarCarrito = document.getElementById("boton_agregar");
-			let boton_comprar = document.getElementById("boton_comprar");
-
-			boton_agregarCarrito.href=`\cart.html?yourKey=${producto[0].idProducto}`;
-			boton_comprar.href=`\checkout.html?yourKey=${producto[0].idProducto}`;
-
-			boton_agregarCarrito.setAttribute('onclick',`funcion_boton_agregarCarrito();`);
-		});
+		for(var i=0;i<3;i++){
+			let min_foto=document.getElementById(`mini_foto_${(i+1)}`);
+			min_foto.style=`background-image:url(${arrayProducto[0].Imagen_Producto}})`;
+			min_foto.setAttribute("data-image",`${arrayProducto[0].Imagen_Producto}`);
+		}
 		
-		function funcion_boton_agregarCarrito(){
-			console.log("prueba de boton 1");
-			let cart= Array.from(JSON.parse(localStorage.getItem("Carrito")));
-			cart.push((document.getElementById("contenido_producto")).value);
-			localStorage.setItem("Carrito", JSON.stringify(cart));
-			console.log("prueba de boton 1");
+		let boton_agregarCarrito = document.getElementById("boton_agregar");
+		let boton_comprar = document.getElementById("boton_comprar");
+
+		boton_agregarCarrito.href=`\cart.html?yourKey=${arrayProducto[0].idProducto}`;
+		boton_comprar.href=`\checkout.html?yourKey=${arrayProducto[0].idProducto}`;
+
+		boton_agregarCarrito.setAttribute('onclick',`funcion_boton_agregarCarrito();`);
+	}
+
+	async function getIdProducto(id){
+		try {
+			let id_prod = id; 
+			let response = await axios.get(`http://localhost:3000/Productos/${id_prod}`);
+			insertarProductoFront(response.data);
+		} catch (error) {
+			console.log(error);
 		}
 	}
-
-
+	
 	window.onload = function(){
 		var id = recupero_id();
+		console.log('El id del producto es:'+id);
 		getIdProducto(id);
-
-		//console.log("Producto Recuperado");
-		//console.log(producto);
-
-		//corroborar(); 
-
 	}
+
+
 	 
 </script>
 

@@ -15,8 +15,6 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
-
-
 </head>
 <body>
 
@@ -465,7 +463,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</footer>
 </div>
 
-<script>
+<!-- <script>
 	var carrito=[];
 if(sessionStorage.getItem("Carrito")==null){
 sessionStorage.setItem("Carrito", JSON.stringify(carrito));
@@ -475,145 +473,135 @@ sessionStorage.setItem("Carrito", JSON.stringify(carrito));
 //carrito= Array.from(JSON.parse(sessionStorage.getItem("Carrito"))); 
 var contador_carrito=document.getElementById("cantidad_productosCarrito");
 contador_carrito.textContent=`${carrito.length}`;
-</script>
+</script> -->
 
 
 <script>
-	var productos = []; 
 	
 	
-	function storeLocalStorage(productos){
+	/* function storeLocalStorage(productos){
 		sessionStorage.setItem("Productos", JSON.stringify(productos));
+	} */
+
+	function insertarGrilla(productosArray){
+
+		const grilla= document.getElementById("Grid-Productos");
+		grilla.innerHTML="";
+		for(var i=0;i<productos.length;i++){
+			let elemento=document.createElement('div');/*1° {*/
+				//elemento.classList.add("card");
+			elemento.classList.add("product");
+			elemento.setAttribute("id","producto");
+
+			let subElemento1=document.createElement('div');/*2° {*/
+			subElemento1.classList.add('product_image');
+			
+			let subElemento2=document.createElement('a');
+			subElemento2.setAttribute('href',"product.html");
+
+			subElemento1.appendChild(subElemento2);
+
+			subElemento2=document.createElement('img');
+			subElemento2.setAttribute('src',`${productos[i].Imagen_Producto}`);
+			subElemento2.setAttribute('alt',"");
+
+			subElemento1.appendChild(subElemento2);
+
+			elemento.appendChild(subElemento1);/*2° }*/
+		
+			subElemento1=document.createElement('div');/*3° {*/
+			subElemento1.classList.add("product_content");
+			subElemento1.classList.add("clearfix");
+
+			subElemento2=document.createElement("div");/*4° {*/
+			subElemento2.classList.add("product_info");
+
+			let subElemento3=document.createElement("div");/*5° {*/
+			subElemento3.classList.add("product_name");
+
+			let subElemento4=document.createElement('a');
+			subElemento4.setAttribute('href',"");
+			subElemento4.setAttribute('onclick',`window.open('\product.html?yourKey='+${productos[i].idProducto});`);
+
+			//console.log(`${productos[i].Imagen_Producto}`);
+
+			//let texto=document.createTextNode();
+			//console.log(texto);
+			subElemento4.textContent=`${productos[i].Nombre_Producto}`;/*5° }*/
+
+			subElemento3.appendChild(subElemento4);
+			subElemento2.appendChild(subElemento3);
+
+			subElemento3=document.createElement("div");/*6° {*/
+			subElemento3.classList.add("product_price");
+			subElemento3.textContent=`$${productos[i].Precio_Producto}`;/*6° }*/
+
+			subElemento2.appendChild(subElemento3);/*4° }*/
+
+			subElemento1.appendChild(subElemento2);
+
+			subElemento3=document.createElement("div");/*7° {*/
+			subElemento3.classList.add("product_options");
+
+			subElemento4=document.createElement('div'); /*8° {*/
+			subElemento4.classList.add("product_buy");
+			subElemento4.classList.add("product_option");
+
+			let subElemento5=document.createElement('img');
+			subElemento5.setAttribute('src',"images/shopping-bag-white.svg");
+			subElemento5.setAttribute('alt',"");
+
+			subElemento4.appendChild(subElemento5);/*8° }*/
+
+			subElemento3.appendChild(subElemento4); /*7° }*/
+
+			subElemento1.appendChild(subElemento3);/*3° }*/
+
+			elemento.appendChild(subElemento1); /*1° }*/
+
+	//onclick="window.open('\product.html?yourKey='${productos[i].idProducto}+ );"
+
+		/*(`
+//1°<div class="product">
+	//2°<div class="product_image"><a href="product.html"><img src="${productos[i].Imagen_Producto}" alt=""></div>
+	//3°<div class="product_content clearfix">
+			//4°<div class="product_info">
+					//5°<div class="product_name"><a href="product.html">${productos[i].Nombre_Producto}</a></div>
+					//6°<div class="product_price">$${productos[i].Precio_Producto}</div>
+				</div>
+			//7°<div class="product_options">
+					//8°<div class="product_buy product_option"><img src="images/shopping-bag-white.svg" alt=""></div>
+				</div>
+		</div>
+	</div>
+	`)*/
+		//console.log(productos[i].Nombre_Producto);
+		//console.log(productos[i].Imagen_Producto);
+
+		//grilla.insertAdjacentHTML('beforeend',elemento);
+		grilla.appendChild(elemento);
+		}
 	}
 
+
 	// Funciones para acceder a la base de datos
-	function getAPIProducto() {
-		
-		const grilla= document.getElementById("Grid-Productos");
-
-            //datos.innerHTML = "";
-            axios.get('http://localhost:3000/Productos')
-            .then(response => {
-				grilla.innerHTML="";
-				console.log(response); 
-                productos = response.data; // Arreglo con los productos
-				console.log(productos);
-
-				/*Envio productos a otra pagina*/
-				var prod = productos[0].Nombre_Producto; 
-				storeLocalStorage(productos);
-				// De paso ya se cargaria en la pagina. 
-				
-				for(var i=0;i<productos.length;i++){
-					let elemento=document.createElement('div');/*1° {*/
-						//elemento.classList.add("card");
-						elemento.classList.add("product");
-						elemento.setAttribute("id","producto");
-
-						let subElemento1=document.createElement('div');/*2° {*/
-						subElemento1.classList.add('product_image');
-						
-						let subElemento2=document.createElement('a');
-						subElemento2.setAttribute('href',"product.html");
-
-						subElemento1.appendChild(subElemento2);
-
-						subElemento2=document.createElement('img');
-						subElemento2.setAttribute('src',`${productos[i].Imagen_Producto}`);
-						subElemento2.setAttribute('alt',"");
-
-						subElemento1.appendChild(subElemento2);
-
-						elemento.appendChild(subElemento1);/*2° }*/
-					
-						subElemento1=document.createElement('div');/*3° {*/
-						subElemento1.classList.add("product_content");
-						subElemento1.classList.add("clearfix");
-
-							subElemento2=document.createElement("div");/*4° {*/
-							subElemento2.classList.add("product_info");
-
-								let subElemento3=document.createElement("div");/*5° {*/
-								subElemento3.classList.add("product_name");
-
-								let subElemento4=document.createElement('a');
-								subElemento4.setAttribute('href',"");
-								subElemento4.setAttribute('onclick',`window.open('\product.html?yourKey='+${productos[i].idProducto});`);
-
-								//console.log(`${productos[i].Imagen_Producto}`);
-
-								//let texto=document.createTextNode();
-								//console.log(texto);
-								subElemento4.textContent=`${productos[i].Nombre_Producto}`;/*5° }*/
-
-								subElemento3.appendChild(subElemento4);
-								subElemento2.appendChild(subElemento3);
-
-								subElemento3=document.createElement("div");/*6° {*/
-								subElemento3.classList.add("product_price");
-								subElemento3.textContent=`$${productos[i].Precio_Producto}`;/*6° }*/
-
-							subElemento2.appendChild(subElemento3);/*4° }*/
-
-							subElemento1.appendChild(subElemento2);
-
-							subElemento3=document.createElement("div");/*7° {*/
-							subElemento3.classList.add("product_options");
-
-								subElemento4=document.createElement('div'); /*8° {*/
-								subElemento4.classList.add("product_buy");
-								subElemento4.classList.add("product_option");
-
-								let subElemento5=document.createElement('img');
-								subElemento5.setAttribute('src',"images/shopping-bag-white.svg");
-								subElemento5.setAttribute('alt',"");
-
-								subElemento4.appendChild(subElemento5);/*8° }*/
-
-							subElemento3.appendChild(subElemento4); /*7° }*/
-
-						subElemento1.appendChild(subElemento3);/*3° }*/
-
-					elemento.appendChild(subElemento1); /*1° }*/
-
-				//onclick="window.open('\product.html?yourKey='${productos[i].idProducto}+ );"
-
-					/*(`
-			//1°<div class="product">
-				//2°<div class="product_image"><a href="product.html"><img src="${productos[i].Imagen_Producto}" alt=""></div>
-				//3°<div class="product_content clearfix">
-						//4°<div class="product_info">
-								//5°<div class="product_name"><a href="product.html">${productos[i].Nombre_Producto}</a></div>
-								//6°<div class="product_price">$${productos[i].Precio_Producto}</div>
-							</div>
-						//7°<div class="product_options">
-								//8°<div class="product_buy product_option"><img src="images/shopping-bag-white.svg" alt=""></div>
-							</div>
-					</div>
-				</div>
-				`)*/
-					console.log(productos[i].Nombre_Producto);
-					console.log(productos[i].Imagen_Producto);
-
-					//grilla.insertAdjacentHTML('beforeend',elemento);
-					grilla.appendChild(elemento);
-				}
-				//document.getElementById('estilo_principal').href = 'styles/categories.css'; 
-				//document.getElementById('estilo_principal_responsive').href = 'styles/categories_responsive.css'; 
-			})
-            .catch(error => console.log(error))
-    }
 	
+	async function getAPIProducto(){
+		try {
+			let productos = []; 
+			let response = await axios.get('http://localhost:3000/Productos');
+			console.log(response.data); // Esto es un array 
+			productos = response.data; 
+			productos.forEach(elem =>{console.log(elem)});
+			insertarGrilla(productos);
+		} catch (error) {
+			console.log(error); 
+		}
+	}
 	
 
 	window.onload = function() {
         getAPIProducto();
-		console.log(productos); 
-		//storeLocalStorage(productos); // Almaceno en local store
-
-		
-		
-		// En esta instancia la variable productos ya deberia de tener elementos 
     }
 
 </script>
