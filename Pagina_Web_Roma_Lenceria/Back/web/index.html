@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        function getAPICliente() {
+            //datos.innerHTML = "";
+            axios.get('http://localhost:3000/Clientes')
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+            // response.data es un arreglo
+            // Y lo recorro con foreach 
+        }
+
+        function postAPICliente(datos) {
+            //cartel.innerHTML = "";
+            //var valor = {datos};
+            //console.log(valor);
+            console.log(datos);  
+            axios.post('http://localhost:3000/Clientes/AddCliente', datos)
+            .then(response => {
+                if (response.status === 200) {
+                    cartel.textContent = "Exito";
+                    cartel.style.color = "green";
+                } else {
+                    cartel.textContent = "Hubo un error";
+                    cartel.style.color = "red";
+                }
+            })
+        }
+
+
+        window.onload = function() {
+            
+
+            // stringify --> lo convierte a string 
+            //let clienteJson = JSON.stringify(cliente); 
+            //formElement.addEventListener("submit",postAPICliente(cliente));
+
+            
+            // Para poder hacer un get al cliente. 
+            boton1 = document.getElementById("Get");
+            boton1.addEventListener("click", getAPICliente);
+            boton2 = document.getElementById("Guardar"); 
+            //boton2.addEventListener("click",postAPICliente(cliente)); 
+
+            boton2.addEventListener("click", () => {
+                // Para poder dar de alta al cliente 
+            //const formElement = document.getElementById("saveCliente"); 
+            let Nombre_Cliente = document.getElementById("Nombre_Cliente");
+            let Apellido_Cliente = document.getElementById("Apellido_Cliente");
+            let Email_Cliente = document.getElementById("Email_Cliente");
+            let CUIT_Cliente = document.getElementById("CUIT_Cliente");
+            let CUIL_Cliente = document.getElementById("CUIL_Cliente");
+            let Telefono_Cliente = document.getElementById("Telefono_Cliente");
+            let Provincia_Cliente = document.getElementById("Provincia_Cliente");
+            let Localidad_Cliente = document.getElementById("Localidad_Cliente");
+            let Codigo_P_Cliente = document.getElementById("Codigo_P_Cliente");
+            let Direccion_P_Cliente = document.getElementById("Direccion_Cliente");
+            // npm run dev 
+
+            let cliente = { 
+                Nombre_Cliente:Nombre_Cliente.value,
+                Apellido_Cliente:Apellido_Cliente.value,
+                Email_Cliente:Email_Cliente.value,
+                CUIT_Cliente:CUIT_Cliente.value,
+                CUIL_Cliente:CUIL_Cliente.value,
+                Telefono_Cliente:Telefono_Cliente.value,
+                Provincia_Cliente:Provincia_Cliente.value,
+                Localidad_Cliente:Localidad_Cliente.value,
+                Codigo_P_Cliente:Codigo_P_Cliente.value,
+                Direccion_P_Cliente:Direccion_P_Cliente.value
+            }; 
+            
+            console.log("muestro nombre"); 
+            console.log(cliente); 
+                // Validar datos antes de invocar metodo 
+                postAPICliente(cliente)});
+        }
+    </script>
+</head>
+<body>
+    
+    <div>
+            <h1> Datos del cliente </h1>
+            <br>
+
+            <div>
+                <label for="Nombre_Cliente">Nombre</label>
+                <input id="Nombre_Cliente" placeholder="Nombre">
+            </div>
+            <br>
+            <div>
+                <label for="Apellido_Cliente">Apellido</label>
+                <input id="Apellido_Cliente" placeholder="Apellido">
+            </div>
+            <br>
+            <div>
+                <label for="Email_Cliente">Email</label>
+                <input id="Email_Cliente" placeholder="Email">
+            </div>
+            <br>
+
+            <div>
+                <label for="CUIT_Cliente">CUIT</label>
+                <input id="CUIT_Cliente" placeholder="CUIT">
+            </div>
+            <br>
+
+            <div>
+                <label for="CUIL_Cliente">CUIL</label>
+                <input id="CUIL_Cliente" placeholder="CUIL">
+            </div>
+            <br>
+
+            <div>
+                <label for="Telefono_Cliente">Telefono</label>
+                <input id="Telefono_Cliente" placeholder="Telefono">
+            </div>
+            <br>
+
+            <div>
+                <label for="Provincia_Cliente">Provincia</label>
+                <input id="Provincia_Cliente" placeholder="Provincia">
+            </div>
+            <br>
+
+            <div>
+                <label for="Localidad_Cliente">Localidad</label>
+                <input id="Localidad_Cliente" placeholder="Localidad">
+            </div>
+            <br>
+
+            <div>
+                <label for="Codigo_P_Cliente">Codigo Postal</label>
+                <input id="Codigo_P_Cliente" placeholder="Codigo Postal">
+            </div>
+            <br>
+
+            <div>
+                <label for="Direccion_Cliente">Direccion</label>
+                <input id="Direccion_Cliente" placeholder="Direccion">
+            </div>
+            <br>
+    </div>
+
+    <div>
+        <button id="Guardar">Guardar Cliente</button>
+    </div>
+    
+    <br>
+
+    <div>
+        <button id = "Get">Get</button>
+    </div>
+    <!--<script src="./script.js"></script>-->
+
+
+</body>
+</html>
+

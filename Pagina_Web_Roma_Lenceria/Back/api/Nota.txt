@@ -1,0 +1,26 @@
+1° Para poder crear el back lo que vamos a hacer es crear lo que sería una api, la cual esta será nuestro servidor local para que podamos mandar datos desde el back. 
+
+Con el cmd nos posicionamos en esta carpeta y ecribimos en la consolta:
+C:\Users\Agustin\Desktop\ConexionBackFront\api>npm init -y
+
+Esto me crea una aplicacion node por defecto. Y me crea una archivo package.sjon 
+
+Dentro del paquete lo que nos interesa es el main:"index.js" dado que es el punto de entrada. Eso vendría a hacer lo que se ejecuta inicialmente cuando se carga una aplicacion. 
+Ese index.js lo creo yo, porque sobre el cual voy a trabajar. 
+
+2° Debo de importa una librería muy importante llamada express 
+
+C:\Users\Agustin\Desktop\ConexionBackFront\api>npm i express
+
+y otra libería mas. 
+
+C:\Users\Agustin\Desktop\ConexionBackFront\api>npm i cors
+
+3° Codifico la API ver codigo en index.js 
+
+4° Ejecuto la api para ver como corre el puerto. 
+
+C:\Users\Agustin\Desktop\ConexionBackFront\api>node index.js
+
+
+
