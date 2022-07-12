@@ -1,10 +1,9 @@
 const { Router } = require("express");
 const router = Router();
 // La llave lo conviene 
-const {addFactura,getIdFactura} = require("../controllers/facturas");
+const {addProductohasFactura} = require("../controllers/producto_has_factura");
 
-router.post("/AddFactura",addFactura);
-router.get("/:id",getIdFactura); 
+router.post("/AddProductohasFactura",addProductohasFactura);
 
 // Exportando esto ya podemos acceder al metodo. 
 module.exports = router; 

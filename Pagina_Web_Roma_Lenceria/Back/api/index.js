@@ -4,6 +4,7 @@ const mysql= require('./src/bd/bd');
 const clientes = require("./src/routes/clientes");
 const productos = require("./src/routes/productos");
 const facturas = require("./src/routes/facturas");
+const producto_has_factura = require('./src/routes/producto_has_factura');
 
 const app = express() 
 
@@ -23,6 +24,8 @@ app.use(cors());
 app.use('/Clientes',clientes);
 app.use('/Productos',productos);
 app.use('/Facturas',facturas);
+app.use('/ProductohasFactura',producto_has_factura);
+
 //app.use('/AddClientes/AddClientes',clientes);
 
 

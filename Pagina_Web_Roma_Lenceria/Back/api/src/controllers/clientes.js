@@ -14,9 +14,10 @@ exports.getCliente =async (req, res) => {
 exports.getIdCliente =async (req, res) => {
     try {
         console.log('Entre al controlador cliente para recuperar id');
-        console.log(req.params.id);
-        const [results ] = await conn.query("SELECT *FROM cliente WHERE idCliente = "+req.params.id);
-        console.log(results); 
+        console.log('el valor que recibe getIdCliente es:'+req.params.id);
+        const [results ] = await conn.query("SELECT *FROM cliente WHERE CUIL_Cliente="+req.params.id);
+        console.log("El resultado de la consulta es:" +results); 
+        console.log(results);
         return res.status(200).json(results);
     } catch (error) {
         res.status(500).json({msg: "Hubo un error."});

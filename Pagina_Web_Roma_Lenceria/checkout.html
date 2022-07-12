@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="styles/checkout.css">
 <link rel="stylesheet" type="text/css" href="styles/checkout_responsive.css">
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/moment" ></script>
 </head>
 
 
@@ -147,24 +148,23 @@
 									<input id="Apellido_Cliente" type="text" class="checkout_input checkout_input_50" placeholder="Apellido/s" required="required">
 								</div>
 								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
-									<select name="provincia" id="provincia" class="provincia_select provincia_select_50 checkout_input">
-										<option>CUIL</option>
-										<option>CUIT</option>
-									</select>
-									<input id="CUIL_Cliente" type="text" class="checkout_input checkout_input_50" placeholder="CUIL/CUIT" required="required">
+									<input id="CUIL_Cliente" type="text" class="checkout_input checkout_input_50" placeholder="CUIL" required="required">
+									<input id="CUIT_Cliente" type="text" class="checkout_input checkout_input_50" placeholder="CUIT" required="required">
 								</div>
 								<input id="Email_Cliente" type="text" class="checkout_input" placeholder="E-mail" required="required">
-								<select name="provincia" id="Provincia_Cliente" class="provincia_select checkout_input">
-									<option>San Luis</option>
-									<option>Códoba</option>
-									<option>Buenos Aires</option>
-									<option>Mendoza</option>
+								<select name="provincia" id="Provincia_Cliente" 
+								onchange="SeleccionarProvincia()" class="provincia_select checkout_input">
+									<option value="san luis">San Luis</option>
+									<option value="córdoba">Códoba</option>
+									<option value="buenos aires">Buenos Aires</option>
+									<option value="mendoza">Mendoza</option>
 								</select>
 								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
 									<input id="Codigo_P_Cliente" type="text" class="checkout_input checkout_input_50" placeholder="Código Postal" required="required">
-									<select name="localidad" id="Localidad_Cliente" class="localidad_select localidad_select_50 checkout_input">
-										<option>San Luis</option>
-										<option>La Toma</option>
+									<select name="localidad" id="Localidad_Cliente" 
+									onchange="SeleccionarLocalidad()" class="localidad_select localidad_select_50 checkout_input">
+										<option value="san luis">San Luis</option>
+										<option value="la toma">La Toma</option>
 									</select>
 								</div>
 								
@@ -233,7 +233,7 @@
 								<div class="visa payment_option"><a href="#"><img src="images/visa.jpg" alt=""></a></div>
 								<div class="master payment_option"><a href="#"><img src="images/master.jpg" alt=""></a></div>
 							</div>
-							<button class="cart_total_button"id="boton_realizar_compra">Realizar pedido</button>
+							<button class="cart_total_button"id="boton_realizar_compra">Realizar Compra</button>
 						</div>
 					</div>
 				</div>
@@ -355,29 +355,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </div>
 
 
-<script>
-	var carrito=[];
-if(localStorage.getItem("Carrito")==null){
-	localStorage.setItem("Carrito", JSON.stringify(carrito));
-}else{
-	carrito= Array.from(JSON.parse(localStorage.getItem("Carrito"))); 
-}
-//carrito= Array.from(JSON.parse(localStorage.getItem("Carrito"))); 
-var contador_carrito=document.getElementById("cantidad_productosCarrito");
-contador_carrito.textContent=`${carrito.length}`;
-</script>
-
-<script>
-	
-	// Recibo lo que me envian.  
-	/*
-	function corroborar(){
-		var elemento = Array.from(JSON.parse(sessionStorage.getItem("Productos"))); 
-		console.log("El elemento es:")
-		console.log(elemento);
-	}
-	*/
-
+<script> 
+		
 	function recupero_id(){
 		var query = location.search.substring(1);
 		var keyValues = query.split(/=/);
@@ -385,24 +364,80 @@ contador_carrito.textContent=`${carrito.length}`;
 		return keyValues[1]; 
 	}
 
-	function postAPICliente(datos) {
-            //cartel.innerHTML = "";
-            //var valor = {datos};
-            //console.log(valor);
-            console.log(datos);  
-            axios.post('http://localhost:3000/Clientes/AddCliente',datos)
-            .then(response => {
-                if (response.status === 200) {
-                    cartel.textContent = "Exito";
-                    cartel.style.color = "green";
-                } else {
-                    cartel.textContent = "Hubo un error";
-                    cartel.style.color = "red";
-                }
-            })
-    }
-	
-	function postAPIFactura(datos) {
+	function SeleccionarProvincia() {
+		let selection = document.getElementById("Provincia_Cliente");
+		return selection.options[selection.selectedIndex];
+	}
+
+	function SeleccionarLocalidad() {
+		let selection = document.getElementById("Localidad_Cliente");
+		return selection.options[selection.selectedIndex];
+	}
+
+	function objCliente(){
+		let Nombre_Cliente = document.getElementById("Nombre_Cliente");
+		let Apellido_Cliente = document.getElementById("Apellido_Cliente");
+		let CUIL_Cliente = document.getElementById("CUIL_Cliente");
+		let CUIT_Cliente = document.getElementById("CUIT_Cliente");
+		let Email_Cliente = document.getElementById("Email_Cliente");
+		let Provincia_Cliente = SeleccionarProvincia();
+		let Codigo_Postal_Cliente = document.getElementById("Codigo_P_Cliente");
+		let Localidad_Cliente = SeleccionarLocalidad();
+		let Direccion_Cliente = document.getElementById("Barrio"); // Por el momento esto lo voy a usar como direccion, veremos luego la concatenacion.  
+		let Telefono_Cliente = document.getElementById("Telefono_Cliente");
+		
+		// Una vez que haya obtenido todo inserto el cliente primero 
+
+		let cliente = { 
+                Nombre_Cliente:Nombre_Cliente.value,
+                Apellido_Cliente:Apellido_Cliente.value,
+                Email_Cliente:Email_Cliente.value,
+                CUIT_Cliente:CUIT_Cliente.value,
+                CUIL_Cliente:CUIL_Cliente.value,
+                Telefono_Cliente:Telefono_Cliente.value,
+                Provincia_Cliente:Provincia_Cliente.value,
+                Localidad_Cliente:Localidad_Cliente.value,
+                Codigo_Postal_Cliente:Codigo_Postal_Cliente.value,
+                Direccion_P_Cliente:Direccion_Cliente.value
+        };
+		return cliente;
+	}
+
+	async function postAPICliente(cliente){
+		try {
+			let response = await axios.post('http://localhost:3000/Clientes/AddCliente',cliente); 
+		} catch (error) {
+			console.log(error); 
+		}
+	}
+
+
+	/* function getIdCliente(CUIL) {
+		let cuil_cliente=CUIL;
+		//datos.innerHTML = "";
+		//console.log(id);
+		axios.get(`http://localhost:3000/Clientes/${cuil_cliente}`)
+		.then(response => {
+		localStorage.setItem("GuardoIdCliente",JSON.stringify(response.data));
+		});
+	} */
+
+	let getCuilCliente = async(CUIL) =>{
+
+		try {
+			let cuil_cliente=CUIL;
+			//console.log(id_prod);
+			let response = await axios.get(`http://localhost:3000/Clientes/${cuil_cliente}`);
+			console.log(response.data); 
+			return response.data;
+		} catch (error) {
+			console.log(error);
+		}
+		 
+	}
+
+
+	/* function postAPIFactura(datos) {
             //cartel.innerHTML = "";
             //var valor = {datos};
             //console.log(valor);
@@ -417,9 +452,45 @@ contador_carrito.textContent=`${carrito.length}`;
                     cartel.style.color = "red";
                 }
             })
-    }
+    } */
 
-	function getIdProducto(id) {
+	async function postAPIFactura(factura){
+		try {
+			console.log(factura);  
+            let response = await axios.post('http://localhost:3000/Facturas/AddFactura',factura)
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	async function postAPIProductohasFactura(renglon){
+		try {
+			let response = await axios.post('http://localhost:3000/ProductohasFactura/AddProductohasFactura',renglon); 
+		} catch (error) {
+			console.log(error); 
+		}
+	}
+
+
+	function insertarProductoVentaFront(producto){
+		//localStorage.setItem("GuardoProducto",JSON.stringify(producto)); 
+		let costo_envio=400;
+		let nombre_producto_carrito=document.getElementById("nombre_producto_1");
+		let precio_producto_carrito=document.getElementById("precio_producto_1");
+		let	envio=document.getElementById("valor_envio");
+		let	subtotal=document.getElementById("valor_subtotal");
+		let	total=document.getElementById("valor_total");
+		nombre_producto_carrito.textContent=producto[0].Nombre_Producto;
+		precio_producto_carrito.textContent=`$${producto[0].Precio_Producto}.00`;
+		envio.textContent=`$${costo_envio}.00`;
+		subtotal.textContent=`$${producto[0].Precio_Producto}.00`;
+		total.textContent=`$${producto[0].Precio_Producto+costo_envio}.00`;
+		//let boton_comprar = document.getElementById("boton_realizar_compra");
+		//boton_comprar.setAttribute('onclick',`efectuar_compra();`);
+	}
+
+
+	/* function getIdProducto(id) {
 		var carrito=[];
 		var recuperoProducto; 
 		
@@ -451,95 +522,117 @@ contador_carrito.textContent=`${carrito.length}`;
 			boton_comprar.setAttribute('onclick',`efectuar_compra();`);
 		});
 		
+	} */
+
+	
+	let getIdProducto = async (id) => {
+		try {
+			let id_prod = id; 
+			let response = await axios.get(`http://localhost:3000/Productos/${id_prod}`);
+			insertarProductoVentaFront(response.data);
+			return response.data; 
+			//producto = response.data;
+			//return "response";
+		} catch (error) {
+			console.log(error);
+			//return "Error";
+		}
+
 	}
 
-	function getIdCliente(id) {
+	async function getIdFactura(idCliente){
+		try {
+			let id_clien = idCliente; 
+			let response = await axios.get(`http://localhost:3000/Facturas/${id_clien}`);
+			//insertarProductoFront(response.data);
+			return response.data;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	
 
-		let id_prod=id;
-		//datos.innerHTML = "";
+	async function efectuar_compra(productos){
+		let cliente; 
+		//let id = recupero_id();
 		//console.log(id);
-		axios.get(`http://localhost:3000/Clientes/${id_prod}`)
-		.then(response => {
-			localStorage.setItem("GuardoIdCliente",JSON.stringify(response.data));
-		});
-		
-	}
+		// Obtengo los productos, para insertarlo en lo que sería la tabla Producto_has_Factura
+		//let produ = getIdProducto(id);
 
-	function efectuar_compra(){
-		var id = recupero_id();
-		console.log(id);
-		getIdProducto(id);
-		// Creamos el cliente 
-		let Nombre_Cliente = document.getElementById("Nombre_Cliente");
-		let Apellido_Cliente = document.getElementById("Apellido_Cliente");
-		let CUIT_Cliente = document.getElementById("CUIL_Cliente");
-		let CUIL_Cliente = document.getElementById("CUIL_Cliente");
-		let Email_Cliente = document.getElementById("Email_Cliente");
-		let Provincia_Cliente = document.getElementById("Provincia_Cliente");
-		let Codigo_P_Cliente = document.getElementById("Codigo_P_Cliente");
-		let Localidad_Cliente = document.getElementById("Localidad_Cliente");
-		let Direccion_P_Cliente = document.getElementById("Barrio"); 
-		/*
-		`${document.getElementById("Barrio").value}
-		${document.getElementById("Calle").value}
-		${document.getElementById("Dpto").value} 
-		${document.getElementById("Piso").value}`;
-		let Direccion_P_Cliente = valor; 
-		*/
-
-		let Telefono_Cliente = document.getElementById("Telefono_Cliente");
-		
-		// Una vez que haya obtenido todo inserto el cliente primero 
-
-		let cliente = { 
-                Nombre_Cliente:Nombre_Cliente.value,
-                Apellido_Cliente:Apellido_Cliente.value,
-                Email_Cliente:Email_Cliente.value,
-                CUIT_Cliente:CUIT_Cliente.value,
-                CUIL_Cliente:CUIL_Cliente.value,
-                Telefono_Cliente:Telefono_Cliente.value,
-                Provincia_Cliente:Provincia_Cliente.value,
-                Localidad_Cliente:Localidad_Cliente.value,
-                Codigo_P_Cliente:Codigo_P_Cliente.value,
-                Direccion_P_Cliente:Direccion_P_Cliente.value
-        };
-
+		// Creamos el cliente y lo insertamos en la base de datos. 
+		console.log(1);
+		cliente = objCliente();
 		console.log(cliente); 
-		postAPICliente(cliente);
+		await postAPICliente(cliente);
 
-		let	total_aux1=(document.getElementById("valor_total").textContent).split("$");
-		let	total_aux2=(total_aux[0]).split(".");
-		let total=total_aux2[0];
+		// Acá lo tenemos que buscar para poder recuperar ahora su id.
+		let cuil = document.getElementById("CUIL_Cliente").value; 
+		console.log(cuil);
+		let Cliente_idCliente = await getCuilCliente(cuil);
+		console.log("El cliente obtenido es el siguiente");
+		console.log(Cliente_idCliente);
+		console.log(Cliente_idCliente[0].idCliente);
+		let idCliente = Cliente_idCliente[0].idCliente;
+		
+		// Ahora debemos crear la factura. 
+		//let	total_aux1=(document.getElementById("valor_total").textContent).split("$");
+		//let	total_aux2=(total_aux1[0]).split(".");
+		//let total=total_aux2[0];
 		console.log("obtengo total:");
+		let total = productos[0].Precio_Producto + 400;
 		console.log(total);
-
-		getIdCliente(cliente.CUIL_Cliente);
-
-		var idcliente = JSON.parse(localStorage.getItem("GuardoIdProducto"));
+		let myDate =  moment(new Date()).format("YYYY-MM-DD");
+		console.log(myDate);
 
 		let Factura = {
-			Fecha_Factura:getDate(),
+			Fecha_Factura:myDate,
 			MontoTotal_Factura:total,
 			Forma_Pago_Factura:"0",
 			Tipo_de_Factura:"A",
-			Estado_Venta: 0,
-			Venta_Entregada:0,
-			Cliente_idCliente:idcliente
-			
+			Estado_Venta: 0, // 0 en proceso, 1 confirmado habría que cambiarlo cuando se haya confirmado el correo. 
+			Venta_Entregada:0, // 0 no se entrego la venta, 1 se entrego 
+			Cliente_idCliente:idCliente
 		}
-		postAPIFactura(Factura);
+		console.log(Factura);
 
+		// Alta de la factura
+		await postAPIFactura(Factura);
+
+		// Deberiamos hacer un get de esa factura que ingresamos. 
+		let idFactura = await getIdFactura(idCliente);
+
+		// Por el ultimo faltaría dar de alta en lo que sería los renglones. 
+		// Esto debería estar luego dentro de un for, en el cual se creen todos los ojbetos que se van a ir insetando como si fueran renglones dentro de la Producto_has_Factura 
+		let p_f = {
+			Producto_idProducto:productos[0].idProducto,
+			Factura_idFactura:idFactura[0].idFactura,
+			PF_Cantidad_Prendas:1, // por el momento es uno 
+			PF_Precio_Unitario:productos[0].Precio_Producto,
+			PF_Subtotal:1*productos[0].Precio_Producto // habria que arreglar aca, el tema ese del envio. 
+		}
+
+		await postAPIProductohasFactura(p_f);
+	
+	}
+
+	window.onload = async function(){
+		/*En este caso es un producto, pero acá deberíamos de obtener un array de id's  
+		  De modo de cargar en esa factura que se muestra la lista marroncita esa, todos 
+		  los productos que se compraron. Con el total final. 
+		*/ 
+		var id = recupero_id();
+		console.log('El id del producto es:'+id);
+		/*Ahora en base a todos esos id's los pongo en el front marroncito ese*/
+		let productos = await getIdProducto(id); // el await, hace que espere por el dato. 
+		console.log(productos);
 		
-
-
-		// Una vez creado el cliente ingresamos la factura. 
-
-		//console.log("Producto Recuperado");
-		//console.log(producto);
-
-		//corroborar(); 
+		botonRealizaCompra = document.getElementById("boton_realizar_compra");
+		botonRealizaCompra.addEventListener("click", () => {
+			efectuar_compra(productos);
+		});  
 
 	}
+
 
 	//var id = recupero_id();
 	//	getIdProducto(id);
