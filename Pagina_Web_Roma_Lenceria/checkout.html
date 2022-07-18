@@ -412,16 +412,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	}
 
 
-	/* function getIdCliente(CUIL) {
-		let cuil_cliente=CUIL;
-		//datos.innerHTML = "";
-		//console.log(id);
-		axios.get(`http://localhost:3000/Clientes/${cuil_cliente}`)
-		.then(response => {
-		localStorage.setItem("GuardoIdCliente",JSON.stringify(response.data));
-		});
-	} */
-
 	let getCuilCliente = async(CUIL) =>{
 
 		try {
@@ -436,23 +426,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		 
 	}
 
-
-	/* function postAPIFactura(datos) {
-            //cartel.innerHTML = "";
-            //var valor = {datos};
-            //console.log(valor);
-            console.log(datos);  
-            axios.post('http://localhost:3000/Facturas/AddFactura',datos)
-            .then(response => {
-                if (response.status === 200) {
-                    cartel.textContent = "Exito";
-                    cartel.style.color = "green";
-                } else {
-                    cartel.textContent = "Hubo un error";
-                    cartel.style.color = "red";
-                }
-            })
-    } */
 
 	async function postAPIFactura(factura){
 		try {
@@ -490,41 +463,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	}
 
 
-	/* function getIdProducto(id) {
-		var carrito=[];
-		var recuperoProducto; 
-		
-		let id_prod=id;
-		//datos.innerHTML = "";
-		//console.log(id);
-		axios.get(`http://localhost:3000/Productos/${id_prod}`)
-		.then(response => {
-			var producto = []; 
-			let costo_envio=400;
-			
-			console.log(id_prod);
-			producto = response.data; 
-			localStorage.setItem("GuardoProducto",JSON.stringify(producto)); 
-			let nombre_producto_carrito=document.getElementById("nombre_producto_1");
-			let precio_producto_carrito=document.getElementById("precio_producto_1");
-			let	envio=document.getElementById("valor_envio");
-			let	subtotal=document.getElementById("valor_subtotal");
-			let	total=document.getElementById("valor_total");
-			nombre_producto_carrito.textContent=producto[0].Nombre_Producto;
-			precio_producto_carrito.textContent=`$${producto[0].Precio_Producto}.00`;
-			envio.textContent=`$${costo_envio}.00`;
-			subtotal.textContent=`$${producto[0].Precio_Producto}.00`;
-			total.textContent=`$${producto[0].Precio_Producto+costo_envio}.00`;
-
-
-
-			let boton_comprar = document.getElementById("boton_realizar_compra");
-			boton_comprar.setAttribute('onclick',`efectuar_compra();`);
-		});
-		
-	} */
-
-	
 	let getIdProducto = async (id) => {
 		try {
 			let id_prod = id; 

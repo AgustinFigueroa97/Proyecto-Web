@@ -28,7 +28,6 @@ app.use('/ProductohasFactura',producto_has_factura);
 
 //app.use('/AddClientes/AddClientes',clientes);
 
-
 // Lo que indicamos con esto, lo que le estamos diciendo es que la aplicacion esccuche en este puerto, en este caso en el 3000, entonces ejecute este codigo de adentro. 
 app.listen(port,()=>{
     console.log(`Estoy ejecutandome en http://localhost:${port}`)
