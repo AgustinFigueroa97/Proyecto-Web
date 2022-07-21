@@ -1,6 +1,7 @@
 const express = require('express') 
 const cors = require('cors')
 const mysql= require('./src/bd/bd');
+//const compra = require('./src/routes/compra')
 const clientes = require("./src/routes/clientes");
 const productos = require("./src/routes/productos");
 const facturas = require("./src/routes/facturas");
@@ -8,11 +9,11 @@ const producto_has_factura = require('./src/routes/producto_has_factura');
 
 const app = express() 
 
-const port = 3000 
+const port = process.env.PORT || 3000; 
 
 app.use(
     express.urlencoded({
-        extended:true
+        extended:false
     })
 );
 
@@ -21,6 +22,11 @@ app.use(express.json({extended: true}));
 app.use(cors());
 
 // Rutas de los metodos 
+//app.use('/Compra',compra);
+app.use('/api/compra', require('./src/routes/compra'));
+
+
+
 app.use('/Clientes',clientes);
 app.use('/Productos',productos);
 app.use('/Facturas',facturas);

@@ -540,7 +540,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		let idFactura = await getIdFactura(idCliente);
 
 		// Por el ultimo faltaría dar de alta en lo que sería los renglones. 
-		// Esto debería estar luego dentro de un for, en el cual se creen todos los ojbetos que se van a ir insetando como si fueran renglones dentro de la Producto_has_Factura 
+		// Esto debería estar luego dentro de un for, en el cual se creen todos los ojbetos que se van a ir insertando como si fueran renglones dentro de la Producto_has_Factura 
 		let p_f = {
 			Producto_idProducto:productos[0].idProducto,
 			Factura_idFactura:idFactura[0].idFactura,
@@ -552,6 +552,40 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		await postAPIProductohasFactura(p_f);
 	
 	}
+
+	const sendData = async (user) => {
+		try {
+			console.log("Entre a sendData");
+			console.log(JSON.stringify(user));
+			//btnForm.setAttribute('disabled', true);
+			const response = await fetch('http://localhost:3000/api/compra/registrarCompra', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(user),
+			});
+
+			const data = await response.json();
+
+			console.log(data);
+
+		} catch (error) {
+			console.log(error);
+		}
+    }
+
+	/* async function sendData(user){
+		try {
+			console.log(user); 
+			console.log(JSON.stringify(user)); 
+            let response = await axios.post('http://localhost:3000/api/compra/registrarCompra',user)
+			console.log(response.data);
+		} catch (error) {
+			console.log(error);
+		}
+	} */
+
 
 	window.onload = async function(){
 		/*En este caso es un producto, pero acá deberíamos de obtener un array de id's  
@@ -565,8 +599,22 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		console.log(productos);
 		
 		botonRealizaCompra = document.getElementById("boton_realizar_compra");
-		botonRealizaCompra.addEventListener("click", () => {
-			efectuar_compra(productos);
+		botonRealizaCompra.addEventListener("click", async () => {
+			//efectuar_compra(productos);
+
+			let nombre = document.getElementById('Nombre_Cliente');
+			let correo = document.getElementById('Email_Cliente');
+			
+			let user = {
+				nombre:nombre.value,
+				correo:correo.value
+			};
+			console.log(user.nombre);
+			console.log(user.correo);
+
+			await sendData(user);
+
+
 		});  
 
 	}
