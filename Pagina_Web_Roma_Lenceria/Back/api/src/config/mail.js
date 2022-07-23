@@ -55,7 +55,7 @@ let transporter = nodemailer.createTransport({
         </head>
         
         <div id="email___content">
-            <img src="https://i.imgur.com/eboNR82.png" alt="">
+            <img src="https://raw.githubusercontent.com/AgustinFigueroa97/Proyecto-Web/ramaAgustin/Imagenes/LogoRomaLenceria.jpg" alt="">
             <h2>Hola ${ name }</h2>
             <p>Para confirmar tu compra, ingresa al siguiente enlace</p>
             <a
